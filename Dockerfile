@@ -1,7 +1,9 @@
 FROM php:8.2-apache
 
 RUN docker-php-ext-install mysqli \
-    && a2enmod headers rewrite
+    && a2enmod headers rewrite \
+    && printf '%s\n' '<Directory /var/www/html>' '    AllowOverride All' '    Require all granted' '</Directory>' > /etc/apache2/conf-available/bakery.conf \
+    && a2enconf bakery
 
 WORKDIR /var/www/html
 COPY . /var/www/html/
