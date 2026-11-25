@@ -1,0 +1,16 @@
+# Never commit real credentials or local environment settings.
+.env
+.env.*
+!.env.example
+
+# Local logs and editor/system files.
+*.log
+.vscode/
+.idea/
+Thumbs.db
+Desktop.ini
+
+# Temporary development files.
+schema_inspect.php
+debug_query.php
+test_db.php

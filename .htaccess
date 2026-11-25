@@ -1,0 +1,18 @@
+Options -Indexes
+
+# Prevent direct access to configuration, helper, and development files.
+<FilesMatch "^(db|config|test_db)\.php$">
+    Require all denied
+</FilesMatch>
+
+<FilesMatch "^\.(env|git|htaccess)|\.sql$">
+    Require all denied
+</FilesMatch>
+
+# Basic browser security headers. HTTPS should be enabled before adding HSTS.
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+</IfModule>

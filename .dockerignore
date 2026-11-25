@@ -1,0 +1,10 @@
+.git
+.github
+.env
+.env.*
+!.env.example
+.vscode
+.idea
+node_modules
+logs
+test_db.php
