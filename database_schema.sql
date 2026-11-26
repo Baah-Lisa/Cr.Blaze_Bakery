@@ -1,6 +1,5 @@
 -- Cr. Blaze Bakery production schema.
 -- Run this once against the configured MySQL database before first launch.
-
 CREATE TABLE IF NOT EXISTS products (
   id INT NOT NULL AUTO_INCREMENT,
   name VARCHAR(100) NOT NULL,
@@ -43,8 +42,7 @@ CREATE TABLE IF NOT EXISTS orders (
   KEY idx_orders_phone (phone),
   KEY idx_orders_status (status),
   KEY fk_orders_customer (customer_id),
-  CONSTRAINT fk_orders_customer FOREIGN KEY (customer_id) REFERENCES customers(id)
-    ON UPDATE CASCADE ON DELETE SET NULL
+  CONSTRAINT fk_orders_customer FOREIGN KEY (customer_id) REFERENCES customers(id) ON UPDATE CASCADE ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS order_items (
@@ -56,10 +54,8 @@ CREATE TABLE IF NOT EXISTS order_items (
   PRIMARY KEY (id),
   KEY idx_order_items_order (order_id),
   KEY idx_order_items_product (product_id),
-  CONSTRAINT fk_order_items_order FOREIGN KEY (order_id) REFERENCES orders(id)
-    ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT fk_order_items_product FOREIGN KEY (product_id) REFERENCES products(id)
-    ON UPDATE CASCADE ON DELETE RESTRICT
+  CONSTRAINT fk_order_items_order FOREIGN KEY (order_id) REFERENCES orders(id) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT fk_order_items_product FOREIGN KEY (product_id) REFERENCES products(id) ON UPDATE CASCADE ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS admin_users (
@@ -72,10 +68,9 @@ CREATE TABLE IF NOT EXISTS admin_users (
   UNIQUE KEY uq_admin_users_username (username)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO products (id, name, description, price, image, stock) VALUES
-  (1, 'Cookies', 'Fresh and delicious cookies', 15.00, 'cookies.jpg', 19),
-  (2, 'Sweets and Candies', 'Sweet treats for every occasion', 10.00, 'sweets.jpg', 30),
-  (3, 'Meat Pies', 'Tasty and freshly baked meat pies', 15.00, 'meat-pies.jpg', 20)
-ON DUPLICATE KEY UPDATE
-  name = VALUES(name), description = VALUES(description), price = VALUES(price),
-  image = VALUES(image), stock = VALUES(stock);
+-- Seed only missing products. Re-running this file must not reset stock or overwrite
+-- product edits, customer records, or orders.
+INSERT IGNORE INTO products (id, name, description, price, image, stock) VALUES
+(1, 'Cookies', 'Fresh and delicious cookies', 15.00, 'cookies.jpg', 19),
+(2, 'Sweets and Candies', 'Sweet treats for every occasion', 10.00, 'sweets.jpg', 30),
+(3, 'Meat Pies', 'Tasty and freshly baked meat pies', 15.00, 'meat-pies.jpg', 20);
